@@ -12,7 +12,11 @@ public class OBJLoader
 {
     List<Float> texCoords = new ArrayList<Float>();
     List<Float> vertCoords = new ArrayList<Float>();
-    List<Float> faceCoords = new ArrayList<Float>();
+    List<Float> normalCoords = new ArrayList<Float>();
+    
+    List<Integer> normalIndex = new ArrayList<Integer>();
+    List<Integer> vertIndex = new ArrayList<Integer>();
+    List<Integer> texIndex = new ArrayList<Integer>();
     
     private float tx, ty, tz; //Translate axis
     private float ra, rz, ry, rx; //Rotation angle, and axis
@@ -26,21 +30,49 @@ public class OBJLoader
             
             while((currentLine = fileReader.readLine()) != null)
             {
+                if(currentLine.charAt(0) == 'v')
+                {
+                    String[] currentLineSplit = currentLine.split(" ");
+                    
+                    vertCoords.add(Float.valueOf(currentLineSplit[1]));
+                    vertCoords.add(Float.valueOf(currentLineSplit[2]));
+                    vertCoords.add(Float.valueOf(currentLineSplit[3]));
+                }
+                
+                if(currentLine.charAt(0) == 'v' && currentLine.charAt(1) == 'n')
+                {
+                    String[] currentLineSplit = currentLine.split(" ");
+                    
+                    normalCoords.add(Float.valueOf(currentLineSplit[1]));
+                    normalCoords.add(Float.valueOf(currentLineSplit[2]));
+                    normalCoords.add(Float.valueOf(currentLineSplit[3]));
+                }
+                
+                if(currentLine.charAt(0) == 'v' && currentLine.charAt(1) == 't')
+                {
+                    String[] currentLineSplit = currentLine.split(" ");
+                    
+                    texCoords.add(Float.valueOf(currentLineSplit[1]));
+                    texCoords.add(Float.valueOf(currentLineSplit[2]));
+                    texCoords.add(Float.valueOf(currentLineSplit[3]));
+                }
+                
+                
                 if(currentLine.charAt(0) == 'f')
                 {
                     String[] currentLineSplit = currentLine.split("/");
                     
-                    texCoords.add(Float.valueOf(currentLineSplit[0]));
-                    texCoords.add(Float.valueOf(currentLineSplit[3]));
-                    texCoords.add(Float.valueOf(currentLineSplit[6]));
+                    texIndex.add(Integer.valueOf(currentLineSplit[0]));
+                    texIndex.add(Integer.valueOf(currentLineSplit[3]));
+                    texIndex.add(Integer.valueOf(currentLineSplit[6]));
                     
-                    vertCoords.add(Float.valueOf(currentLineSplit[1]));
-                    vertCoords.add(Float.valueOf(currentLineSplit[4]));
-                    vertCoords.add(Float.valueOf(currentLineSplit[6]));
+                    vertIndex.add(Integer.valueOf(currentLineSplit[1]));
+                    vertIndex.add(Integer.valueOf(currentLineSplit[4]));
+                    vertIndex.add(Integer.valueOf(currentLineSplit[6]));
                     
-                    faceCoords.add(Float.valueOf(currentLineSplit[2]));
-                    faceCoords.add(Float.valueOf(currentLineSplit[5]));
-                    faceCoords.add(Float.valueOf(currentLineSplit[6]));
+                    normalIndex.add(Integer.valueOf(currentLineSplit[2]));
+                    normalIndex.add(Integer.valueOf(currentLineSplit[5]));
+                    normalIndex.add(Integer.valueOf(currentLineSplit[6]));
                 }
             }
             
@@ -85,17 +117,17 @@ public class OBJLoader
     {
         GL11.glPushMatrix();
         
-        GL11.glTranslatef(tz, ty, tz);
+        GL11.glTranslatef(tx, ty, tz);
         GL11.glRotatef(ra, rx, ry, rz);
         GL11.glScalef(sx, sy, sz);
         
         GL11.glBegin(GL11.GL_TRIANGLES);
         
-        for(int i = 0; i < faceCoords.size(); i += 3)
+        for(int i = 0; i < vertIndex.size(); i += 3)
         {
-            GL11.glVertex3f(faceCoords.get(i), faceCoords.get(i + 1), faceCoords.get(i + 2));
-            GL11.glTexCoord3f(texCoords.get(i), texCoords.get(i + 1), texCoords.get(i + 2));
-            GL11.glNormal3f(vertCoords.get(i), vertCoords.get(i + 1), vertCoords.get(i + 2));
+            GL11.glNormal3f(normalCoords.get(normalIndex.get(i) - 1), normalCoords.get(normalIndex.get(i + 1) - 1), normalCoords.get(normalIndex.get(i + 2) - 1));
+            GL11.glTexCoord3f(texCoords.get(texIndex.get(i) - 1), texCoords.get(texIndex.get(i + 1) - 1), texCoords.get(texIndex.get(i + 2) - 1));
+            GL11.glVertex3f(vertCoords.get(vertIndex.get(i) - 1), vertCoords.get(vertIndex.get(i + 1) - 1), vertCoords.get(vertIndex.get(i + 2) - 1));
         }
         
         GL11.glEnd();

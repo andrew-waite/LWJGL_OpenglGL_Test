@@ -5,13 +5,24 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
+import objloader.OBJLoader;
+
 public class Main
 {
     private static final int WIDTH = 600;
     private static final int HEIGHT = 600;
     
+    private OBJLoader water;
+    
+    public void init()
+    {
+        
+    }
+    
     public void run()
     {
+        init();
+        
         try
         {
             Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
