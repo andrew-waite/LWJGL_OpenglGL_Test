@@ -84,6 +84,11 @@ public class OBJLoader
     public OBJLoader renderObjects()
     {
         GL11.glPushMatrix();
+        
+        GL11.glTranslatef(tz, ty, tz);
+        GL11.glRotatef(ra, rx, ry, rz);
+        GL11.glScalef(sx, sy, sz);
+        
         GL11.glBegin(GL11.GL_TRIANGLES);
         
         for(int i = 0; i < faceCoords.size(); i += 3)
