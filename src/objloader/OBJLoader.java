@@ -14,6 +14,10 @@ public class OBJLoader
     List<Float> vertCoords = new ArrayList<Float>();
     List<Float> faceCoords = new ArrayList<Float>();
     
+    private float tx, ty, tz; //Translate axis
+    private float ra, rz, ry, rx; //Rotation angle, and axis
+    private float sx, sy, sz; //Scale axis and amount
+    
     public OBJLoader(String fileName) throws IOException
     {
             BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
@@ -43,8 +47,13 @@ public class OBJLoader
             fileReader.close();
     }
     
-    public OBJLoader rotate(float rotationAngle)
+    public OBJLoader rotate(float rotationAngle, float x, float y, float z)
     {
+        this.ra = rotationAngle;
+        this.rx = x;
+        this.ry = y;
+        this.rz = z;
+        
         return this;
     }
     
@@ -56,11 +65,19 @@ public class OBJLoader
     
     public OBJLoader translate(float x, float y, float z)
     {
+        this.tx = x;
+        this.ty = y;
+        this.tz = z;
+        
         return this;
     }
     
     public OBJLoader scale(float x, float y, float z)
     {
+        this.sx = x;
+        this.sy = y;
+        this.sz = z;
+        
         return this;
     }
     
@@ -72,6 +89,8 @@ public class OBJLoader
         for(int i = 0; i < faceCoords.size(); i += 3)
         {
             GL11.glVertex3f(faceCoords.get(i), faceCoords.get(i + 1), faceCoords.get(i + 2));
+            GL11.glTexCoord3f(texCoords.get(i), texCoords.get(i + 1), texCoords.get(i + 2));
+            GL11.glNormal3f(vertCoords.get(i), vertCoords.get(i + 1), vertCoords.get(i + 2));
         }
         
         GL11.glEnd();
