@@ -1,6 +1,7 @@
 package objloader;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,61 +23,94 @@ public class OBJLoader
     private float ra, rz, ry, rx; //Rotation angle, and axis
     private float sx, sy, sz; //Scale axis and amount
     
-    public OBJLoader(String fileName) throws IOException
+    public OBJLoader(String fileName)
     {
-            BufferedReader fileReader = new BufferedReader(new FileReader(fileName));
+            BufferedReader fileReader = null;
+            
+            try
+            {
+                fileReader = new BufferedReader(new FileReader(fileName));
+            } 
+            catch (FileNotFoundException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             
             String currentLine;
             
-            while((currentLine = fileReader.readLine()) != null)
+            try
             {
-                if(currentLine.charAt(0) == 'v')
+                while((currentLine = fileReader.readLine()) != null)
                 {
-                    String[] currentLineSplit = currentLine.split(" ");
+                    if(currentLine.length() == 0) continue;
+                    else
+                    if(currentLine.charAt(0) == 'v' && currentLine.charAt(1) == 'n')
+                    {
+                        String[] currentLineSplit = currentLine.split(" ");
+                        
+                        normalCoords.add(Float.valueOf(currentLineSplit[1]));
+                        normalCoords.add(Float.valueOf(currentLineSplit[2]));
+                        normalCoords.add(Float.valueOf(currentLineSplit[3]));
+                    }
+                    else
+                    if(currentLine.charAt(0) == 'v' && currentLine.charAt(1) == 't')
+                    {
+                        String[] currentLineSplit = currentLine.split(" ");
+                        
+                        texCoords.add(Float.valueOf(currentLineSplit[1]));
+                        texCoords.add(Float.valueOf(currentLineSplit[2]));
+                        texCoords.add(Float.valueOf(currentLineSplit[3]));
+                    }
+                    else
+                    if(currentLine.charAt(0) == 'v')
+                    {
+                        String[] currentLineSplit = currentLine.split(" ");
+                            
+                        vertCoords.add(Float.valueOf(currentLineSplit[2]));
+                        vertCoords.add(Float.valueOf(currentLineSplit[3]));
+                        vertCoords.add(Float.valueOf(currentLineSplit[4]));
+                    }
+                    else
+                    if(currentLine.charAt(0) == 'f')
+                    {
+                        String[] currentLineSplit = currentLine.split("[/ ]");
+                        texIndex.add(Integer.valueOf(currentLineSplit[1]));
+                        texIndex.add(Integer.valueOf(currentLineSplit[4]));
+                        texIndex.add(Integer.valueOf(currentLineSplit[7]));
+                        
+                        vertIndex.add(Integer.valueOf(currentLineSplit[2]));
+                        vertIndex.add(Integer.valueOf(currentLineSplit[5]));
+                        vertIndex.add(Integer.valueOf(currentLineSplit[8]));
+                        
+                        normalIndex.add(Integer.valueOf(currentLineSplit[3]));
+                        normalIndex.add(Integer.valueOf(currentLineSplit[6]));
+                        normalIndex.add(Integer.valueOf(currentLineSplit[9]));
+                    }
                     
-                    vertCoords.add(Float.valueOf(currentLineSplit[1]));
-                    vertCoords.add(Float.valueOf(currentLineSplit[2]));
-                    vertCoords.add(Float.valueOf(currentLineSplit[3]));
+                    else continue;
                 }
-                
-                if(currentLine.charAt(0) == 'v' && currentLine.charAt(1) == 'n')
-                {
-                    String[] currentLineSplit = currentLine.split(" ");
-                    
-                    normalCoords.add(Float.valueOf(currentLineSplit[1]));
-                    normalCoords.add(Float.valueOf(currentLineSplit[2]));
-                    normalCoords.add(Float.valueOf(currentLineSplit[3]));
-                }
-                
-                if(currentLine.charAt(0) == 'v' && currentLine.charAt(1) == 't')
-                {
-                    String[] currentLineSplit = currentLine.split(" ");
-                    
-                    texCoords.add(Float.valueOf(currentLineSplit[1]));
-                    texCoords.add(Float.valueOf(currentLineSplit[2]));
-                    texCoords.add(Float.valueOf(currentLineSplit[3]));
-                }
-                
-                
-                if(currentLine.charAt(0) == 'f')
-                {
-                    String[] currentLineSplit = currentLine.split("/");
-                    
-                    texIndex.add(Integer.valueOf(currentLineSplit[0]));
-                    texIndex.add(Integer.valueOf(currentLineSplit[3]));
-                    texIndex.add(Integer.valueOf(currentLineSplit[6]));
-                    
-                    vertIndex.add(Integer.valueOf(currentLineSplit[1]));
-                    vertIndex.add(Integer.valueOf(currentLineSplit[4]));
-                    vertIndex.add(Integer.valueOf(currentLineSplit[6]));
-                    
-                    normalIndex.add(Integer.valueOf(currentLineSplit[2]));
-                    normalIndex.add(Integer.valueOf(currentLineSplit[5]));
-                    normalIndex.add(Integer.valueOf(currentLineSplit[6]));
-                }
+            } 
+            catch (NumberFormatException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } 
+            catch (IOException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
             
-            fileReader.close();
+            try
+            {
+                fileReader.close();
+            } 
+            catch (IOException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
     }
     
     public OBJLoader rotate(float rotationAngle, float x, float y, float z)
@@ -113,7 +147,7 @@ public class OBJLoader
         return this;
     }
     
-    public OBJLoader renderObjects()
+    public OBJLoader renderObject()
     {
         GL11.glPushMatrix();
         
