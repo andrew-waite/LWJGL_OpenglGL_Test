@@ -33,7 +33,6 @@ public class OBJLoader
             } 
             catch (FileNotFoundException e)
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             
@@ -93,12 +92,10 @@ public class OBJLoader
             } 
             catch (NumberFormatException e)
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } 
             catch (IOException e)
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             
@@ -108,7 +105,6 @@ public class OBJLoader
             } 
             catch (IOException e)
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
     }

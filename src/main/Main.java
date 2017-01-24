@@ -18,11 +18,13 @@ public class Main
     
     public void pre_init()
     {
-        water = new OBJLoader("./OBJ_FILES/water.obj");
+       // water = new OBJLoader("./OBJ_FILES/water.obj");
     }
     
-    public static void init()
+    public void init()
     {
+        pre_init();
+        
         try 
         {
             Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
@@ -45,7 +47,7 @@ public class Main
         }
     }
     
-    public static void run()
+    public void run()
     {
         init();
         
@@ -67,9 +69,11 @@ public class Main
         System.exit(-1);
     }
     
-    public static void draw()
+    public void draw()
     {   
         GL11.glPushMatrix();
+        
+        GL11.glRotatef(45, 0, 1, 0);
 
         GL11.glBegin(GL11.GL_TRIANGLES);
         {
@@ -102,11 +106,13 @@ public class Main
         GL11.glEnd();
          
         GL11.glPopMatrix();
-         
+        
+       //GL11.glColor3f(1.0f,0.0f,0.0f);
+       //water.setColor(0, 0, 255).renderObject();         
     }
     
     public static void main(String[] args) throws LWJGLException
     {
-        run();
+        new Main().run();
     }
 }
