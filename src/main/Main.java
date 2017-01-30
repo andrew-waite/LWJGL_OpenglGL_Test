@@ -89,7 +89,7 @@ public class Main
         GL11.glPushMatrix();
         GL11.glLoadIdentity();  
         //GL11.glTranslatef(0f,0.0f,-7f);  
-        GL11.glScalef(2.0f, 2.0f, 2.0f);
+        //GL11.glScalef(2.0f, 2.0f, 2.0f);
         GL11.glRotatef(45f,0.0f,1.0f,0.0f);               
         GL11.glColor3f(0.5f,0.5f,1.0f);  
              
