@@ -11,8 +11,8 @@ import objloader.OBJLoader;
 
 public class Main
 {
-    private static final int WIDTH = 640;
-    private static final int HEIGHT = 480;
+    private static final int WIDTH = 1200;
+    private static final int HEIGHT = 800;
     
     private OBJLoader water;
     
